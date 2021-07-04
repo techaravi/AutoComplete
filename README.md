@@ -2,4 +2,4 @@
 
 Auto Complete Dropdown
 
-This repository will be updated in a while... Please Wait test
+This repository will be updated in a while... Please Wait
