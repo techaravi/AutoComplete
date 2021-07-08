@@ -8,14 +8,16 @@
 
 <body>
     <h2>Auto Complete Example 1</h2>
-    <div id="example1"></div>
+    <div class="example1"></div>
 </body>
 <script type='text/javascript'>
     var data = [];
     for(var index=0;index < 1000;index++){
         data.push({ displayField: "test"+index, valueFiled: index}) ;
     }
-    var dropdown = new autoComplete({ selector: "#example1", data: data, });
+    var dropdown = new autoComplete({ selector: ".example1", data: data, });
+    
+    
 </script>
 
 </html>
