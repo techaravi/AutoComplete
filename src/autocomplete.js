@@ -5,7 +5,7 @@ var autoComplete = (function () {
 
         // helpers class
         function hasClass(el, className) {
-            return el.classList ? el.classList.contains(className) : new RegExp('\\b' + className + '\\b').test(el.className);
+            return el.classList ? el.classList.contains(className) : new RegExp("\\b" + className + "\\b").test(el.className);
         }
 
         this.options = {
@@ -13,29 +13,29 @@ var autoComplete = (function () {
             data: [],
             valueFiled: "valueFiled",
             displayField: "displayField",
-            placeholder: 'Select an option'
+            placeholder: "Select an option"
         };
         for (var k in options) {
             if (options.hasOwnProperty(k)) this.options[k] = options[k];
         }
 
         // initilisation
-        var elems = typeof this.options.selector == 'object' ? [o.selector] : document.querySelectorAll(this.options.selector);
+        var elems = typeof this.options.selector == "object" ? [o.selector] : document.querySelectorAll(this.options.selector);
 
         this.element = elems[0];
-        this.dropdown = document.createElement('div');
+        this.dropdown = document.createElement("div");
         this.dropdown.id = "autocomplete" + new Date().getTime();
-        this.dropdown.setAttribute('class', "autocomplete");
+        this.dropdown.setAttribute("class", "autocomplete");
         this.dropdown.data = this.options.data;
 
-        var dropdowntext = document.createElement('span');
+        var dropdowntext = document.createElement("span");
         dropdowntext.textContent = this.options.placeholder;
         this.dropdown.appendChild(dropdowntext);
         this.dropdown.dropdowntext = dropdowntext;
 
 
-        var arrow = document.createElement('div');
-        arrow.setAttribute('class', "arrow");
+        var arrow = document.createElement("div");
+        arrow.setAttribute("class", "arrow");
         this.dropdown.appendChild(arrow);
 
         this.element.appendChild(this.dropdown);
@@ -46,23 +46,23 @@ var autoComplete = (function () {
         };
         document.onclick = function (event) {
             that.sourceContainer.remove();
-            that.dropdown.setAttribute('class', "autocomplete");
+            that.dropdown.setAttribute("class", "autocomplete");
         }
 
         this.show_data = function (el) {
             //var controlInstance = this;
             if (hasClass(this.dropdown, "open") == false) {
-                this.dropdown.setAttribute('class', "autocomplete open");
+                this.dropdown.setAttribute("class", "autocomplete open");
 
-                var container = document.createElement('div');
+                var container = document.createElement("div");
                 container.id = this.dropdown.id + "source";
-                container.setAttribute('class', "autocomplete-container");
+                container.setAttribute("class", "autocomplete-container");
                 var top = (this.dropdown.offsetTop + this.dropdown.offsetHeight) + "px";
                 var width = this.dropdown.offsetWidth + "px";
-                container.setAttribute('style', "top:" + top);
+                container.setAttribute("style", "top:" + top);
 
-                this.search = document.createElement('input');
-                this.search.setAttribute('class', "search");
+                this.search = document.createElement("input");
+                this.search.setAttribute("class", "search");
                 var that = this;
                 this.search.onkeyup = function (event) {
                     that.search_values(event);
@@ -74,17 +74,17 @@ var autoComplete = (function () {
 
                 container.appendChild(this.search);
                 this.sourceContainer = container;
-                this.source = document.createElement('ul');
+                this.source = document.createElement("ul");
 
 
                 for (var dataIndex = 0; dataIndex < this.options.data.length; dataIndex++) {
-                    var values = document.createElement('li');
-                    values.setAttribute('data-value', this.options.data[dataIndex][this.options.valueFiled]);
-                    values.setAttribute('data-display', this.options.data[dataIndex][this.options.displayField]);
+                    var values = document.createElement("li");
+                    values.setAttribute("data-value", this.options.data[dataIndex][this.options.valueFiled]);
+                    values.setAttribute("data-display", this.options.data[dataIndex][this.options.displayField]);
 
                     values.textContent = this.options.data[dataIndex][this.options.displayField];
                     if (this.dropdown.dataset.value == this.options.data[dataIndex][this.options.valueFiled]) {
-                        values.setAttribute('class', "active");
+                        values.setAttribute("class", "active");
                         //values.scrollIntoView();
                     }
 
@@ -96,7 +96,7 @@ var autoComplete = (function () {
                 }
                 container.appendChild(this.source);
                 document.getElementsByTagName("body")[0].appendChild(container);
-
+                
 
                 if (this.source.getElementsByClassName("active").length == 1) {
                     this.source.getElementsByClassName("active")[0].scrollIntoView();
@@ -105,7 +105,7 @@ var autoComplete = (function () {
                 }
             } else {
                 this.sourceContainer.remove();
-                this.dropdown.setAttribute('class', "autocomplete");
+                this.dropdown.setAttribute("class", "autocomplete");
             }
         };
 
@@ -132,11 +132,11 @@ var autoComplete = (function () {
         this.selectListValue = function (el) {
             var selectedValue = el.target.dataset.value;
             var selectedText = el.target.dataset.display;
-            this.dropdown.setAttribute('data-value', selectedValue);
-            this.dropdown.setAttribute('data-display', selectedText);
+            this.dropdown.setAttribute("data-value", selectedValue);
+            this.dropdown.setAttribute("data-display", selectedText);
             this.dropdown.dropdowntext.textContent = selectedText;
             this.sourceContainer.remove();
-            this.dropdown.setAttribute('class', "autocomplete");
+            this.dropdown.setAttribute("class", "autocomplete");
         };
         // public destroy method
         this.destroy = function () {
@@ -151,8 +151,8 @@ var autoComplete = (function () {
         this.setValue = function (value) {
             for (var dataIndex = 0; dataIndex < this.options.data.length; dataIndex++) {
                 if (value == this.options.data[dataIndex][this.options.valueFiled]) {
-                    this.dropdown.setAttribute('data-value', this.options.data[dataIndex][this.options.valueFiled]);
-                    this.dropdown.setAttribute('data-display', this.options.data[dataIndex][this.options.displayField]);
+                    this.dropdown.setAttribute("data-value", this.options.data[dataIndex][this.options.valueFiled]);
+                    this.dropdown.setAttribute("data-display", this.options.data[dataIndex][this.options.displayField]);
                     this.dropdown.dropdowntext.textContent = this.options.data[dataIndex][this.options.displayField];
                     break;
                 }
@@ -165,11 +165,11 @@ var autoComplete = (function () {
 })();
 
 (function () {
-    if (typeof define === 'function' && define.amd)
-        define('autoComplete', function () {
+    if (typeof define === "function" && define.amd)
+        define("autoComplete", function () {
             return autoComplete;
         });
-    else if (typeof module !== 'undefined' && module.exports)
+    else if (typeof module !== "undefined" && module.exports)
         module.exports = autoComplete;
     else
         window.autoComplete = autoComplete;
