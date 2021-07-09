@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link href="./src/autocomplete.css" rel="stylesheet" /> 
-       <script src="./src/autocomplete.js" ></script>
+<head>
+    <link href="./src/autocomplete.css" rel="stylesheet" />
+    <script src="./src/autocomplete.js"></script>
 </head>
 <body>
     <h2>Auto Complete Example 1</h2>
-<div id="example1"></div>
+    <div class="example1"></div>
+    <br/>
+    <button id="btnsubmit" onclick="btnclick()" >Submit</button>
 </body>
 <script type='text/javascript'>
-    var dropdown = new autoComplete('#example1');
+    var data = [];
+    for(var index=0;index < 1000;index++){
+        data.push({ displayField: "test"+index, valueFiled: index}) ;
+    }
+    var dropdown = new autoComplete({ selector: ".example1", data: data, });
+    function btnclick(){
+       alert("Selected Value :" + dropdown.getValue());
+    }
+   // dropdown.setValue(35);
+    
 </script>
+
 </html>
