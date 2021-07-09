@@ -8,7 +8,6 @@ var autoComplete = (function () {
             return el.classList ? el.classList.contains(className) : new RegExp('\\b' + className + '\\b').test(el.className);
         }
 
-
         this.options = {
             selector: null,
             data: [],
@@ -28,7 +27,12 @@ var autoComplete = (function () {
         this.dropdown.id = "autocomplete" + new Date().getTime();
         this.dropdown.setAttribute('class', "autocomplete");
         this.dropdown.data = this.options.data;
-        this.dropdown.textContent = this.options.placeholder;
+
+        var dropdowntext = document.createElement('span');
+        dropdowntext.textContent = this.options.placeholder;
+        this.dropdown.appendChild(dropdowntext);
+        this.dropdown.dropdowntext = dropdowntext;
+
 
         var arrow = document.createElement('div');
         arrow.setAttribute('class', "arrow");
@@ -37,7 +41,7 @@ var autoComplete = (function () {
         this.element.appendChild(this.dropdown);
         var that = this;
         this.dropdown.onclick = function (event) {
-            that.clickHandler(event);
+            that.show_data(event);
             event.stopPropagation();
         };
         document.onclick = function (event) {
@@ -45,7 +49,7 @@ var autoComplete = (function () {
             that.dropdown.setAttribute('class', "autocomplete");
         }
 
-        this.clickHandler = function (el) {
+        this.show_data = function (el) {
             //var controlInstance = this;
             if (hasClass(this.dropdown, "open") == false) {
                 this.dropdown.setAttribute('class', "autocomplete open");
@@ -61,13 +65,12 @@ var autoComplete = (function () {
                 this.search.setAttribute('class', "search");
                 var that = this;
                 this.search.onkeyup = function (event) {
-                    that.searchHandler(event);
+                    that.search_values(event);
                     event.stopPropagation();
                 };
                 this.search.onclick = function (event) {
                     event.stopPropagation();
                 };
-
 
                 container.appendChild(this.search);
                 this.sourceContainer = container;
@@ -86,7 +89,7 @@ var autoComplete = (function () {
                     }
 
                     values.onclick = function (event) {
-                        that.selectValueHandler(event);
+                        that.selectListValue(event);
                         event.stopPropagation();
                     };
                     this.source.appendChild(values);
@@ -106,7 +109,7 @@ var autoComplete = (function () {
             }
         };
 
-        this.searchHandler = function (el) {
+        this.search_values = function (el) {
             var searchstring = el.target.value;
             var searchCollection = this.source.children;
             if (searchstring !== "") {
@@ -126,12 +129,12 @@ var autoComplete = (function () {
             }
         }
 
-        this.selectValueHandler = function (el) {
+        this.selectListValue = function (el) {
             var selectedValue = el.target.dataset.value;
             var selectedText = el.target.dataset.display;
             this.dropdown.setAttribute('data-value', selectedValue);
             this.dropdown.setAttribute('data-display', selectedText);
-            this.dropdown.textContent = selectedText;
+            this.dropdown.dropdowntext.textContent = selectedText;
             this.sourceContainer.remove();
             this.dropdown.setAttribute('class', "autocomplete");
         };
@@ -141,8 +144,21 @@ var autoComplete = (function () {
             this.removeChild(this.source);
         };
 
-        this.getValue = function () {};
-        this.setValue = function (value) {};
+        this.getValue = function () {
+            return this.dropdown.dataset.value;
+
+        };
+        this.setValue = function (value) {
+            for (var dataIndex = 0; dataIndex < this.options.data.length; dataIndex++) {
+                if (value == this.options.data[dataIndex][this.options.valueFiled]) {
+                    this.dropdown.setAttribute('data-value', this.options.data[dataIndex][this.options.valueFiled]);
+                    this.dropdown.setAttribute('data-display', this.options.data[dataIndex][this.options.displayField]);
+                    this.dropdown.dropdowntext.textContent = this.options.data[dataIndex][this.options.displayField];
+                    break;
+                }
+            }
+
+        };
     }
 
     return autoComplete;

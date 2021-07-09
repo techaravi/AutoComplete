@@ -1,6 +1,6 @@
 .autocomplete {
     display: block;
-    width: 100%;
+    width: 98%;
     padding: .375rem .75rem;
     font-size: 1rem;
     font-weight: 400;
@@ -30,15 +30,15 @@
     z-index: 9999;
     margin-left: 0;
     margin-right: 0;
-    max-height: 200px;
-    overflow-y: auto;
     position: absolute;
 }
 .autocomplete-container>ul {
     background-color: white;
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0;    
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .autocomplete-container>ul>li {
