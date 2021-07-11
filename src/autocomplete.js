@@ -7,13 +7,23 @@ var autoComplete = (function () {
         function hasClass(el, className) {
             return el.classList ? el.classList.contains(className) : new RegExp("\\b" + className + "\\b").test(el.className);
         }
+        function addEvent(el, type, handler) {
+            if (el.attachEvent) el.attachEvent('on' + type, handler);
+            else el.addEventListener(type, handler);
+        }
+        function removeEvent(el, type, handler) {
+            // if (el.removeEventListener) not working in IE11
+            if (el.detachEvent) el.detachEvent('on' + type, handler);
+            else el.removeEventListener(type, handler);
+        }
 
         this.options = {
             selector: null,
             data: [],
             valueFiled: "valueFiled",
             displayField: "displayField",
-            placeholder: "Select an option"
+            placeholder: "Select an option",
+            onSelect:null
         };
         for (var k in options) {
             if (options.hasOwnProperty(k)) this.options[k] = options[k];
@@ -22,96 +32,94 @@ var autoComplete = (function () {
         // initilisation
         var elems = typeof this.options.selector == "object" ? [o.selector] : document.querySelectorAll(this.options.selector);
 
-        this.element = elems[0];
-        this.dropdown = document.createElement("div");
-        this.dropdown.id = "autocomplete" + new Date().getTime();
-        this.dropdown.setAttribute("class", "autocomplete");
-        this.dropdown.data = this.options.data;
+        var element = elems[0];
+        this.element = document.createElement("div");
+        this.element.id = "autocomplete" + new Date().getTime();
+        this.element.setAttribute("class", "autocomplete");
+        this.element.data = this.options.data;
 
         var dropdowntext = document.createElement("span");
         dropdowntext.textContent = this.options.placeholder;
-        this.dropdown.appendChild(dropdowntext);
-        this.dropdown.dropdowntext = dropdowntext;
+        this.element.appendChild(dropdowntext);
+        this.element.dropdowntext = dropdowntext;
 
 
         var arrow = document.createElement("div");
         arrow.setAttribute("class", "arrow");
-        this.dropdown.appendChild(arrow);
+        this.element.appendChild(arrow);
 
-        this.element.appendChild(this.dropdown);
+        element.appendChild(this.element);
         var that = this;
-        this.dropdown.onclick = function (event) {
-            that.show_data(event);
+        addEvent(this.element, 'click', function (event) {
+            show_data(event,that);            
             event.stopPropagation();
-        };
-        document.onclick = function (event) {
+        });
+        addEvent(document, 'click', function (event) {
             that.sourceContainer.remove();
-            that.dropdown.setAttribute("class", "autocomplete");
-        }
+            that.element.setAttribute("class", "autocomplete");
+        });
 
-        this.show_data = function (el) {
+         function show_data (el,context) {
             //var controlInstance = this;
-            if (hasClass(this.dropdown, "open") == false) {
-                this.dropdown.setAttribute("class", "autocomplete open");
+            if (hasClass(context.element, "open") == false) {
+                context.element.setAttribute("class", "autocomplete open");
 
                 var container = document.createElement("div");
-                container.id = this.dropdown.id + "source";
+                container.id = context.element.id + "source";
                 container.setAttribute("class", "autocomplete-container");
-                var top = (this.dropdown.offsetTop + this.dropdown.offsetHeight) + "px";
-                var width = this.dropdown.offsetWidth + "px";
+                var top = (context.element.offsetTop + context.element.offsetHeight) + "px";
+//                var width = this.dropdown.offsetWidth + "px";
                 container.setAttribute("style", "top:" + top);
 
-                this.search = document.createElement("input");
-                this.search.setAttribute("class", "search");
-                var that = this;
-                this.search.onkeyup = function (event) {
-                    that.search_values(event);
+                context.search = document.createElement("input");
+                context.search.setAttribute("class", "search");
+                var that = context;
+                addEvent(context.search, 'keyup', function (event) {
+                    search_values(event,that);
                     event.stopPropagation();
-                };
-                this.search.onclick = function (event) {
+                });
+                addEvent(context.search, 'click', function (event) {
                     event.stopPropagation();
-                };
+                });
 
-                container.appendChild(this.search);
-                this.sourceContainer = container;
-                this.source = document.createElement("ul");
+                container.appendChild(context.search);
+                context.sourceContainer = container;
+                context.source = document.createElement("ul");
 
 
-                for (var dataIndex = 0; dataIndex < this.options.data.length; dataIndex++) {
+                for (var dataIndex = 0; dataIndex < context.options.data.length; dataIndex++) {
                     var values = document.createElement("li");
-                    values.setAttribute("data-value", this.options.data[dataIndex][this.options.valueFiled]);
-                    values.setAttribute("data-display", this.options.data[dataIndex][this.options.displayField]);
+                    values.setAttribute("data-value", context.options.data[dataIndex][context.options.valueFiled]);
+                    values.setAttribute("data-display", context.options.data[dataIndex][context.options.displayField]);
 
-                    values.textContent = this.options.data[dataIndex][this.options.displayField];
-                    if (this.dropdown.dataset.value == this.options.data[dataIndex][this.options.valueFiled]) {
+                    values.textContent = context.options.data[dataIndex][context.options.displayField];
+                    if (context.element.dataset.value == context.options.data[dataIndex][context.options.valueFiled]) {
                         values.setAttribute("class", "active");
                         //values.scrollIntoView();
                     }
-
-                    values.onclick = function (event) {
-                        that.selectListValue(event);
+                    addEvent(values, 'click', function (event) {
+                        onSelectValue(event,that);
                         event.stopPropagation();
-                    };
-                    this.source.appendChild(values);
+                    });
+                    context.source.appendChild(values);
                 }
-                container.appendChild(this.source);
+                container.appendChild(context.source);
                 document.getElementsByTagName("body")[0].appendChild(container);
                 
 
-                if (this.source.getElementsByClassName("active").length == 1) {
-                    this.source.getElementsByClassName("active")[0].scrollIntoView();
+                if (context.source.getElementsByClassName("active").length == 1) {
+                    context.source.getElementsByClassName("active")[0].scrollIntoView();
                 } else {
-                    this.search.focus();
+                    context.search.focus();
                 }
             } else {
-                this.sourceContainer.remove();
-                this.dropdown.setAttribute("class", "autocomplete");
+                hideSource(context);
             }
         };
 
-        this.search_values = function (el) {
+        function search_values(el,context) {
             var searchstring = el.target.value;
-            var searchCollection = this.source.children;
+            var searchCollection = context.source.children;
             if (searchstring !== "") {
                 searchstring = searchstring.toLowerCase();
                 for (var index = 0; index < searchCollection.length; index++) {
@@ -129,31 +137,46 @@ var autoComplete = (function () {
             }
         }
 
-        this.selectListValue = function (el) {
+        function hideSource(context){
+            var searchCollection = context.source.children;
+            for (var index = 0; index < searchCollection.length; index++) {
+                removeEvent(searchCollection[index],"*");
+            }            
+            removeEvent(context.search,"*");
+            context.sourceContainer.remove();
+            context.element.setAttribute("class", "autocomplete");
+        }
+
+        function onSelectValue(el,context) {
             var selectedValue = el.target.dataset.value;
             var selectedText = el.target.dataset.display;
-            this.dropdown.setAttribute("data-value", selectedValue);
-            this.dropdown.setAttribute("data-display", selectedText);
-            this.dropdown.dropdowntext.textContent = selectedText;
-            this.sourceContainer.remove();
-            this.dropdown.setAttribute("class", "autocomplete");
+            context.element.setAttribute("data-value", selectedValue);
+            context.element.setAttribute("data-display", selectedText);
+            context.element.dropdowntext.textContent = selectedText;
+            hideSource(context);
+            if(context.options.onSelect != null){
+                context.options.onSelect (selectedText, selectedValue);
+            }
         };
         // public destroy method
         this.destroy = function () {
+            removeEvent(this.element,"*");
+            removeEvent(document,"click");
             this.removeChild(this.search);
             this.removeChild(this.source);
+            this.removeChild(this.element);
         };
 
         this.getValue = function () {
-            return this.dropdown.dataset.value;
+            return this.element.dataset.value;
 
         };
         this.setValue = function (value) {
             for (var dataIndex = 0; dataIndex < this.options.data.length; dataIndex++) {
                 if (value == this.options.data[dataIndex][this.options.valueFiled]) {
-                    this.dropdown.setAttribute("data-value", this.options.data[dataIndex][this.options.valueFiled]);
-                    this.dropdown.setAttribute("data-display", this.options.data[dataIndex][this.options.displayField]);
-                    this.dropdown.dropdowntext.textContent = this.options.data[dataIndex][this.options.displayField];
+                    this.element.setAttribute("data-value", this.options.data[dataIndex][this.options.valueFiled]);
+                    this.element.setAttribute("data-display", this.options.data[dataIndex][this.options.displayField]);
+                    this.element.dropdowntext.textContent = this.options.data[dataIndex][this.options.displayField];
                     break;
                 }
             }
