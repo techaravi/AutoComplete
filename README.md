@@ -50,10 +50,7 @@ supports the following minimal versions:
 - Microsoft Internet Explorer
 
 ## Support
-
-This project is actively maintained, but there is no official support channel.  
-If you have a question that another developer might help you with, please post
-Issues in GitHub.
+If you find any bugs then feel free to report them <a href="https://github.com/techaravi/AutoComplete/issues">here</a>.
 
 ## License
 
