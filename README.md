@@ -53,7 +53,7 @@ supports the following minimal versions:
 
 This project is actively maintained, but there is no official support channel.  
 If you have a question that another developer might help you with, please post
-in Issues in GitHub.
+Issues in GitHub.
 
 ## License
 
