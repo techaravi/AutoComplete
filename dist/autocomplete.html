@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Auto Complete Example</title>
+ <link href="autocomplete-bundle.css" rel="stylesheet" />
+</head>
+<body>
+  <h1>Auto Complete Example</h1>
+ <div id="example1">
+ </div> 
+</div>
+  <div>
+    <button type="button" onclick="displayValue()" id="btnsubmit">Submit</button>
+  </div>
+  
+  <!-- Load jQuery -->
+  <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <!-- Load the example plugin bundle. -->
+  <script src="autocomplete-bundle.min.js"></script>
+  <script>
+    // Set global options for the plugin.
+    //$.fn.AutoComplete.options = { outputSelector: '#messages' };
+
+    var data = [];
+    for (var index = 0; index < 1000; index++) {
+        data.push({ displayField: "Sample Data " + index, valueFiled: index });
+    }
+    // Use the plugin once the DOM has been loaded.
+   
+      // Apply the plugin without any additional options to use the default options.
+     var instance = $('#example1').AutoComplete({data:data});
+    function displayValue(){
+      alert(instance.getValue());
+    }
+    instance.setValue("36");
+  </script>
+</body>
+
+</html>

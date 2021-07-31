@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "rootDir": "src",
+      "outDir": "dist",
+      "target": "ES6",
+      "module": "ES6",
+      "moduleResolution": "node",
+      "noImplicitAny": true,
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "allowSyntheticDefaultImports": true,
+      "removeComments": true,
+      "sourceMap": true
+    }
+  }
