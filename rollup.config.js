@@ -13,7 +13,7 @@ export default {
     // Define the bundle format (self-executing function in this case).
     format: 'iife',
     // Enable generation of a separate source map file.
-    sourcemap: true,
+    sourcemap: false,
     // Define the module "jquery" to be expected as a global variable "jQuery".
     globals: {
       jquery: 'jQuery'

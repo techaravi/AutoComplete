@@ -19,4 +19,3 @@ $.fn.AutoComplete = Object.assign(function (options) {
         onSelect: null
     }
 });
-//# sourceMappingURL=plugin.js.map

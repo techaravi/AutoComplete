@@ -3,4 +3,3 @@ describe('Index', () => {
     });
 });
 export {};
-//# sourceMappingURL=index.spec.js.map

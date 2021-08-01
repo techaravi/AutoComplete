@@ -5,53 +5,41 @@
 
     var $__default = /*#__PURE__*/_interopDefaultLegacy($);
 
-    class source {
+    class Source {
       constructor(options, parent) {
         this.options = options;
         this.parentElement = parent.element;
         this.dropdownElement = parent.dropdownelement;
+
+        if (this.options.data.length > 0) {
+          this.options.data[0];
+          this.valueField = this.options.valueFiled;
+          this.displayField = this.options.displayField;
+        }
+
         this.OnCreate();
       }
 
       OnCreate() {
-        this.parentElement.setAttribute("class", "autocomplete open");
+        this.parentElement.classList.add("open");
         this.element = document.createElement('div');
         this.element.id = this.parentElement.id + "source";
-        this.element.setAttribute("class", "autocomplete-container");
-        var top = this.parentElement.offsetTop + this.parentElement.offsetHeight + "px";
+        this.element.classList.add("autocomplete-container");
+        const top = this.parentElement.offsetTop + this.parentElement.offsetHeight + "px";
         this.element.setAttribute("style", "top:" + top);
         this.search = document.createElement("input");
-        this.search.setAttribute("class", "search");
+        this.search.classList.add("search");
         this.search.addEventListener("keyup", e => {
           this.search_values(e.target), e.stopPropagation();
         });
         this.search.addEventListener("click", e => e.stopPropagation());
         this.element.appendChild(this.search);
         this.source = document.createElement("ul");
-
-        for (var dataIndex = 0; dataIndex < this.options.data.length; dataIndex++) {
-          let valueElement = document.createElement("li");
-          let elementData = this.options.data[dataIndex];
-          let valueField = this.options.valueFiled;
-          let displayField = this.options.displayField;
-          let value = elementData[valueField];
-          let display = elementData[displayField];
-          valueElement.setAttribute("data-value", value);
-          valueElement.setAttribute("data-display", display);
-          valueElement.textContent = display;
-
-          if (this.dropdownElement.dataset.value == value) {
-            valueElement.setAttribute("class", "active");
-          }
-
-          valueElement.addEventListener("click", e => this.onSelectValue(e.target));
-          this.source.appendChild(valueElement);
-        }
-
         this.element.appendChild(this.source);
+        this.render_data(this.options.data);
         document.getElementsByTagName("body")[0].appendChild(this.element);
 
-        if (this.source.getElementsByClassName("active").length == 1) {
+        if (this.source.getElementsByClassName("active").length === 1) {
           this.source.getElementsByClassName("active")[0].scrollIntoView();
         } else {
           this.search.focus();
@@ -59,17 +47,13 @@
       }
 
       destroy() {
-        var searchCollection = this.source.children;
-
-        for (var index = 0; index < searchCollection.length; index++) {}
-
         this.element.remove();
-        this.parentElement.setAttribute("class", "autocomplete");
+        this.parentElement.classList.remove("open");
       }
 
       onSelectValue(el) {
-        var selectedValue = el.dataset.value;
-        var selectedText = el.dataset.display;
+        const selectedValue = el.dataset.value;
+        const selectedText = el.dataset.display;
         this.dropdownElement.setAttribute("data-value", selectedValue);
         this.dropdownElement.setAttribute("data-display", selectedText);
         this.dropdownElement.textContent = selectedText;
@@ -80,27 +64,32 @@
         }
       }
 
-      search_values(el) {
-        let searchstring = el.value;
-        let searchCollection = this.source.children;
-
-        if (searchstring !== "") {
-          searchstring = searchstring.toLowerCase();
-
-          for (var index = 0; index < searchCollection.length; index++) {
-            var data = searchCollection[index].dataset.display;
-
-            if (data.toString().trim().toLowerCase().indexOf(searchstring) == -1) {
-              searchCollection[index].style.display = "none";
-            } else {
-              searchCollection[index].style.display = "block";
-            }
-          }
-        } else {
-          for (var index = 0; index < searchCollection.length; index++) {
-            searchCollection[index].style.display = "block";
-          }
+      render_data(data) {
+        while (this.source.firstChild) {
+          this.source.removeChild(this.source.firstChild);
         }
+
+        for (const elementData of data) {
+          const valueElement = document.createElement("li");
+          const value = elementData[this.valueField];
+          const display = elementData[this.displayField];
+          valueElement.setAttribute("data-value", value);
+          valueElement.setAttribute("data-display", display);
+          valueElement.textContent = display;
+
+          if (this.dropdownElement.dataset.value === value.toString()) {
+            valueElement.classList.add("active");
+          }
+
+          valueElement.addEventListener("click", e => this.onSelectValue(e.target));
+          this.source.appendChild(valueElement);
+        }
+      }
+
+      search_values(el) {
+        const searchstring = el.value;
+        const filter = this.options.data.filter(e => e[this.displayField].trim().toLowerCase().indexOf(searchstring) > -1);
+        this.render_data(filter);
       }
 
     }
@@ -115,7 +104,7 @@
     class Index {
       constructor(options) {
         this.options = options;
-        this.parentElement = this.options.selector;
+        this.element = this.options.selector;
         this.OnCreate();
         document.addEventListener("click", e => {
           if (this.sourceObj != null) {
@@ -125,18 +114,15 @@
       }
 
       OnCreate() {
-        this.element = document.createElement('div');
-        this.element.id = "autocomplete" + new Date().getTime();
-        this.element.setAttribute("class", "autocomplete");
-        this.parentElement.appendChild(this.element);
+        this.element.classList.add("autocomplete");
         this.dropdownelement = document.createElement('span');
         this.dropdownelement.textContent = this.options.placeholder;
         this.element.appendChild(this.dropdownelement);
         this.arrowElement = document.createElement('div');
-        this.arrowElement.setAttribute("class", "arrow");
+        this.arrowElement.classList.add("arrow");
         this.element.addEventListener("click", e => {
-          if (utility.hasClass(this.element, "open") == false) {
-            this.sourceObj = new source(this.options, this);
+          if (utility.hasClass(this.element, "open") === false) {
+            this.sourceObj = new Source(this.options, this);
           } else {
             this.sourceObj.destroy();
           }
@@ -151,14 +137,13 @@
       }
 
       setValue(value) {
-        for (var dataIndex = 0; dataIndex < this.options.data.length; dataIndex++) {
-          let elementData = this.options.data[dataIndex];
-          let valueField = this.options.valueFiled;
-          let displayField = this.options.displayField;
-          let elementValue = elementData[valueField];
-          let elementDisplay = elementData[displayField];
+        for (const elementData of this.options.data) {
+          const valueField = this.options.valueFiled;
+          const displayField = this.options.displayField;
+          const elementValue = elementData[valueField];
+          const elementDisplay = elementData[displayField];
 
-          if (value == elementValue) {
+          if (value === elementValue.toString()) {
             this.dropdownelement.setAttribute("data-value", elementValue);
             this.dropdownelement.setAttribute("data-display", elementDisplay);
             this.dropdownelement.textContent = elementDisplay;
@@ -191,4 +176,3 @@
     });
 
 }(jQuery));
-//# sourceMappingURL=autocomplete-bundle.js.map

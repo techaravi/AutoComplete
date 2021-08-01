@@ -10,6 +10,6 @@
       "noImplicitThis": true,
       "allowSyntheticDefaultImports": true,
       "removeComments": true,
-      "sourceMap": true
+      "sourceMap": false
     }
   }
