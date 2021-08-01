@@ -1,6 +1,6 @@
 {
   "name": "@nammaplugin/autocomplete",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Auto Complete Dropdown",
   "scripts": {
     "clean": "rimraf dist && rimraf coverage",
@@ -10,8 +10,7 @@
     "copy:scss": "cpx src/**.scss dist",
     "test": "karma start",
     "bundle": "rollup -c",
-    "minify": "uglifyjs dist/autocomplete-bundle.js --output dist/autocomplete-bundle.min.js",
-    "publish": "npm publish --access=public"
+    "minify": "uglifyjs dist/autocomplete-bundle.js --output dist/autocomplete-bundle.min.js"    
   },
   "repository": {
     "type": "git",
