@@ -11,7 +11,7 @@
     "test": "karma start",
     "bundle": "rollup -c",
     "minify": "uglifyjs dist/autocomplete-bundle.js --output dist/autocomplete-bundle.min.js --source-map \"filename='dist/autocomplete-bundle.min.js.map',url='autocomplete-bundle.min.js.map',content='dist/autocomplete-bundle.js.map'\"",
-    "publish":"npm publish --access=public"
+    "publish": "npm publish --access=public"
   },
   "repository": {
     "type": "git",
@@ -51,7 +51,7 @@
     "rollup-plugin-scss": "^3.0.0"
   },
   "dependencies": {
-    "jquery": "~3.3.1",
+    "jquery": "^3.6.0",
     "node-sass": "^6.0.1"
   },
   "main": "rollup.config.js"
