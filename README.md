@@ -1,12 +1,9 @@
 # AutoComplete
-Auto Complete Dropdown
 [![NPM version][npm-version-image]][npm-url]
-[![NPM downloads][npm-downloads-image]][npm-downloads-url]
 [![MIT License][license-image]][license-url]
-[![Build Status][travis-image]][travis-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
-[![FOSSA Status][fossa-badge-image]][fossa-badge-url]
-[![SemVer compatibility][semver-image]][semver-url]
+[![CI][CI-image]][CI-url]
+
+Auto Complete Dropdown
 
 ## Contents
 
@@ -37,14 +34,15 @@ Enables users to quickly find and select from a pre-populated list of values as 
 Auto Complete Dropdown can be refere from CDN:
 
 ```html
-<link rel="stylesheet" href="https://autocomplete.pages.dev/autocomplete.min.css">
-<script src="https://autocomplete.pages.dev/autocomplete.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://autocomplete.pages.dev/autocomplete-bundle.min.css">
+<script src="https://autocomplete.pages.dev/autocomplete-bundle.min.js"></script>
 ```
 
 The Auto Complete Dropdown can then be initialized on the following way:
 
 ```js
-new autoComplete({selector: "#autocomplete",data: []});
+$("#autocomplete").AutoComplete();
 ```
 
 ## Browsers
@@ -70,3 +68,10 @@ Released under the [MIT license](https://opensource.org/licenses/MIT).
 ### Version 1.0.0 beta - 2021/07/13
 
 * First release
+
+[npm-url]: https://www.npmjs.com/package/@nammaplugin/autocomplete
+[npm-version-image]: https://badge.fury.io/js/%40nammaplugin%2Fautocomplete.svg
+[license-image]: https://img.shields.io/github/license/techaravi/AutoComplete
+[license-url]: LICENSE
+[CI-image]:https://github.com/techaravi/AutoComplete/actions/workflows/node.js.yml/badge.svg
+[CI-url]:https://github.com/techaravi/AutoComplete/actions/workflows/node.js.yml
