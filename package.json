@@ -4,10 +4,10 @@
   "description": "Auto Complete Dropdown",
   "scripts": {
     "clean": "rimraf dist && rimraf coverage",
-    "build": "npm run compile && npm run copy:html && npm run copy:scss && npm run bundle && npm run minify",
+    "build": "npx mkdirp dist/styles && npm run compile && npm run copy:html && npm run copy:scss && npm run bundle && npm run minify",
     "compile": "tsc",
     "copy:html": "cpx src/**.html dist",
-    "copy:scss": "npx mkdirp dist/styles && cpx src/styles/**.scss dist/styles",
+    "copy:scss": "cpx src/styles/**.scss dist/styles",
     "test": "karma start",
     "bundle": "rollup -c",
     "minify": "uglifyjs dist/autocomplete-bundle.js --output dist/autocomplete-bundle.min.js --source-map \"filename='dist/autocomplete-bundle.min.js.map',url='autocomplete-bundle.min.js.map',content='dist/autocomplete-bundle.js.map'\"",
