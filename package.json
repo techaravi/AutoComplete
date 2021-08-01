@@ -7,7 +7,7 @@
     "build": "npm run compile && npm run copy:html && npm run copy:scss && npm run bundle && npm run minify",
     "compile": "tsc",
     "copy:html": "cpx src/**.html dist",
-    "copy:scss": "cpx src/styles/**.scss dist/styles",
+    "copy:scss": "mkdirp dist/styles && cpx src/styles/**.scss dist/styles",
     "test": "karma start",
     "bundle": "rollup -c",
     "minify": "uglifyjs dist/autocomplete-bundle.js --output dist/autocomplete-bundle.min.js --source-map \"filename='dist/autocomplete-bundle.min.js.map',url='autocomplete-bundle.min.js.map',content='dist/autocomplete-bundle.js.map'\"",
@@ -42,13 +42,14 @@
     "karma-jasmine": "^4.0.1",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-typescript": "^5.5.1",
+    "mkdirp": "^1.0.4",
     "rimraf": "^3.0.2",
     "rollup": "^2.55.1",
     "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-scss": "^3.0.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "typescript": "^4.3.5",
-    "uglify-js": "^3.14.1",
-    "rollup-plugin-scss": "^3.0.0"
+    "uglify-js": "^3.14.1"
   },
   "dependencies": {
     "jquery": "^3.6.0",
