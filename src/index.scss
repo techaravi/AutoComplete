@@ -1,3 +1,6 @@
+$background-color:#fff;
+$border-color:#ced4da;
+$font-color:#212529;
 .autocomplete {
 	display: block;
 	width: 98%;
@@ -5,10 +8,10 @@
 	font-size: 1rem;
 	font-weight: 400;
 	line-height: 1.5;
-	color: #212529;
-	background-color: #fff;
+	color: $font-color;
+	background-color: $background-color;
 	background-clip: padding-box;
-	border: 1px solid #ced4da;
+	border: 1px solid $border-color;
 	border-radius: .25rem;
 	transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 	height: 24px;
